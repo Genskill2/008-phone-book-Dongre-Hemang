@@ -214,17 +214,19 @@ int delete(FILE *db_file, char *name) {
         del=p;
         prev->next=del->next;
         free(del);
+        deleted=1;
       }
       else{
         del=base;
         base=base->next;
         free(del);
+        deleted=1;
      }
   }
     prev=p;
     p=p->next;
-    }
- }
+  }
+ 
   write_all_entries(base);
   free_entries(base);
   return deleted;
