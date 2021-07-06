@@ -231,3 +231,21 @@ int delete(FILE *db_file, char *name) {
   free_entries(base);
   return deleted;
 }
+
+int search(FILE *db_file, char *name){
+  entry *first=load_entries(db_file);
+  entry *second=first;
+  int found=0;
+  while(first!=NULL){
+    if(strcmp(first->name,name)==0){
+      printf("%s\n",first->phone);
+      found=1;
+    }
+    first=first->next;
+  }
+  if(found!=1){
+    return 0;
+  }
+  free_entries(second);
+  return 1;
+}
