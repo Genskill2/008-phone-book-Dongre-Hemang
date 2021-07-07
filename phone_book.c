@@ -63,6 +63,17 @@ int main(int argc, char *argv[]) {
     exit(0);
   } else if (strcmp(argv[1], "search") == 0) {  /* Handle search */
                           /* TBD  */
+     if(argc!=3)
+      {exit(1);}
+    FILE *fp = open_db_file();
+    char *name=argv[2];
+    if(!(search(fp,name))){
+      printf("no match\n");
+      fclose(fp);
+      exit(1);}
+    fclose(fp);
+    exit(0);
+  }
  
   } else if (strcmp(argv[1], "delete") == 0) {  /* Handle delete */
     if (argc != 3) {
@@ -182,18 +193,16 @@ void add(char *name, char *phone) {
 void list(FILE *db_file) {
   entry *p = load_entries(db_file);
   entry *base = p;
-  int count=0;
+  int TotalCount=0;
   while (p!=NULL) {
     printf("%-20s : %10s\n", p->name, p->phone);
     p=p->next;
-    count++;
+    TotalCount++;
   }
-  printf("Total entries=%d\n",count);
+  printf("Total entries=%d\n",TotalCount);
   /* TBD print total count */
   free_entries(base);
 }
-
-
 int delete(FILE *db_file, char *name) {
   entry *p = load_entries(db_file);
   entry *base = p;
@@ -218,13 +227,13 @@ int delete(FILE *db_file, char *name) {
         del=p;
         prev->next=del->next;
         free(del);
-        deleted=1;
+        deleted++;
       }
       else{
         del=base;
         base=base->next;
         free(del);
-        deleted=1;
+        deleted++;
      }
   }
     prev=p;
